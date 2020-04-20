@@ -6,7 +6,6 @@
 
 static const int MAP_SIZE = 32;
 
-
 static int Key[256]; //キーが押されているフレーム数を格納する
 
 static int count = 0;
@@ -29,6 +28,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	srand((unsigned int)time(NULL));	//乱数の初期化
 
 	Sprite_Area(0);		//エリアの分割
+	Generate_Field();
 
 
 	//while(裏画面を表画面に反映 メッセージ処理 画面クリア キーの更新)
@@ -37,7 +37,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		DrawFormatString(100, 200, GetColor(255, 255, 255), "test");
 
 		Player_Update(Key, MAP_SIZE);	//Player更新
-
 		
 		Display_Field();	//Field描画
 
