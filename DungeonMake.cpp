@@ -42,104 +42,32 @@ void Field_Initialize() {
 	areaCount++;
 }
 
-//FieldÇÃçÏê¨
 void Generate_Field() {
 
 	for (int y = 0; y < FIELD_HEIGHT; y++) {
 		for (int x = 0; x < FIELD_WIDTH; x++) {
-			field[y][x] = CELL_TYPE_WALL;
+			field[y][x] = 0;
 		}
 	}
 
 	for (int i = 0; i < areaCount; i++) {
-		//ÉGÉäÉAÇÃì‡ë§ÇæÇØroomÇ…Ç∑ÇÈ
 		areas[i].room.x = areas[i].x + 2;
 		areas[i].room.y = areas[i].y + 2;
 		areas[i].room.h = areas[i].h - 4;
 		areas[i].room.w = areas[i].w - 4;
 
-		if (i % 4 != 0) {
-			for (int y = areas[i].room.y; y < areas[i].room.y + areas[i].room.h; y++) {
-				for (int x = areas[i].room.x; x < areas[i].room.x + areas[i].room.w; x++) {
-					field[y][x] = CELL_TYPE_NONE;
-				}
+		for (int y = areas[i].room.y; y < areas[i].room.y + areas[i].room.h; y++){
+			for (int x = areas[i].room.x; x< areas[i].room.x + areas[i].room.w; x++) {
+				field[y][x] = 1;
 			}
 		}
-			for (int x = areas[i].x; x < areas[i].x + areas[i].w; x++) {
-				field[areas[i].y + areas[i].h - 1][x] = CELL_TYPE_NONE;
-			}
-			for (int y = areas[i].y; y < areas[i].y + areas[i].h; y++) {
-				field[y][areas[i].x + areas[i].w - 1] = CELL_TYPE_NONE;
-			}
-
-			if (i % 4 != 0) {
-				for (int j = areas[i].y; j < areas[i].room.y; j++) {
-					srand((unsigned int)time(NULL));
-					if (rand() % 2 == 0) {
-						field[j][areas[i].x + 4] = CELL_TYPE_NONE;
-					}
-					else {
-						field[j][areas[i].x + areas[i].w - 4] = CELL_TYPE_NONE;
-					}
-				}
-				for (int j = areas[i].room.y + areas[i].room.h; j < areas[i].y + areas[i].h; j++) {
-					srand((unsigned int)time(NULL));
-					if (rand() % 2 == 1) {
-						field[j][areas[i].x + 4] = CELL_TYPE_NONE;
-					}
-					else {
-						field[j][areas[i].x + areas[i].w - 4] = CELL_TYPE_NONE;
-					}
-				}
-				for (int j = areas[i].x; j < areas[i].room.x; j++) {
-					field[areas[i].y + areas[i].room.h / 2][j] = CELL_TYPE_NONE;
-				}
-				for (int j = areas[i].room.x + areas[i].room.w; j < areas[i].x + areas[i].w; j++) {
-					field[areas[i].y + areas[i].room.h / 2][j] = CELL_TYPE_NONE;
-				}
-			}
-		
-	}
-	for (int y = 0; y < FIELD_HEIGHT; y++) {
-		for (int x = 0; x < FIELD_WIDTH; x++) {
-			if (field[y][x] == CELL_TYPE_WALL) {
-				continue;
-			}
-			
-			int v[][2] = {
-				{0,-1},
-				{-1,0},
-				{0,1},
-				{1,0},
-			};
-			int n = 0;
-			for (int i = 0; i < 4; i++) {
-				int x2 = x + v[i][0];
-				int y2 = y + v[i][1];
-				if ((x2 < 0) || (x2 >= FIELD_WIDTH) || (y2 < 0) || (y2 >= FIELD_WIDTH)) {
-					n++;
-				}
-				else if (field[y2][x2] == CELL_TYPE_WALL) {
-					n++;
-				}
-				if (n >= 3) {
-					field[y][x] = CELL_TYPE_WALL;
-				}
-			}
-		}
-	}
-	for (int y = 0; y < FIELD_HEIGHT; y++) {
-		field[y][FIELD_WIDTH - 1] = CELL_TYPE_WALL;
-	}
-	for (int x = 0; x < FIELD_WIDTH; x++) {
-		field[FIELD_HEIGHT - 1][x] = CELL_TYPE_WALL;
 	}
 }
 
 void Display_Field() {
 	for (int y = 0; y < FIELD_HEIGHT; y++) {
 		for (int x = 0; x < FIELD_WIDTH; x++) {
-			if (field[y][x] == CELL_TYPE_WALL) {
+			if (field[y][x] == 0) {
 				DrawGraph(x * 32, y * 32, wallImage, TRUE);
 			}
 			else {
