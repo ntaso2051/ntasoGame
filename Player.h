@@ -2,18 +2,20 @@
 
 #define DEF_PLAYER_H
 
-//‰Šú‰»‚·‚é
+//åˆæœŸåŒ–ã™ã‚‹
 void Player_Initialize();
 
-//“®‚«‚ğŒvZ‚·‚é
+//å‹•ãã‚’è¨ˆç®—ã™ã‚‹
 void Player_Update(int Key[256], int MAP_SIZE);
 
-//•`‰æ‚·‚é
+//æç”»ã™ã‚‹
 void Player_Draw();
 
-//I—¹ˆ—‚ğ‚·‚é
+//çµ‚äº†å‡¦ç†ã‚’ã™ã‚‹
 void Player_Finalize();
 
-//‚·‚×‚Ä‚ÌƒL[“ü—Íó‘Ô‚ğ”cˆ¬
+//ã™ã¹ã¦ã®ã‚­ãƒ¼å…¥åŠ›çŠ¶æ…‹ã‚’æŠŠæ¡
 int gpUpdateKey(int Key[256]);
+
+void Debug();
 

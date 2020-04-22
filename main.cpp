@@ -6,52 +6,53 @@
 
 static const int MAP_SIZE = 32;
 
-static int Key[256]; //ƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚éƒtƒŒ[ƒ€”‚ğŠi”[‚·‚é
+static int Key[256]; //ã‚­ãƒ¼ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹ãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã‚’æ ¼ç´ã™ã‚‹
 
 static int count = 0;
 
-// ƒvƒƒOƒ‰ƒ€‚Í WinMain ‚©‚çn‚Ü‚è‚Ü‚·
+// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã¯ WinMain ã‹ã‚‰å§‹ã¾ã‚Šã¾ã™
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	ChangeWindowMode(TRUE), SetDrawScreen(DX_SCREEN_BACK);	// Windowƒ‚[ƒh‚É•ÏX — ‰æ–Êİ’è
-	SetGraphMode(2048, 1536, 32);	//‘SField‚Ì‘å‚«‚³
-	SetWindowSize(1024, 768);	//WindowƒTƒCƒY‚¿‚å‚¤‚Ç‚æ‚­
+	ChangeWindowMode(TRUE), SetDrawScreen(DX_SCREEN_BACK);	// Windowãƒ¢ãƒ¼ãƒ‰ã«å¤‰æ›´ è£ç”»é¢è¨­å®š
+	SetGraphMode(2048, 1536, 32);	//å…¨Fieldã®å¤§ãã•
+	SetWindowSize(1024, 768);	//Windowã‚µã‚¤ã‚ºã¡ã‚‡ã†ã©ã‚ˆã
 
-	if (DxLib_Init() == -1)		// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠ‰Šú‰»ˆ—
+	if (DxLib_Init() == -1)		// ï¼¤ï¼¸ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåˆæœŸåŒ–å‡¦ç†
 	{
-		return -1;			// ƒGƒ‰[‚ª‹N‚«‚½‚ç’¼‚¿‚ÉI—¹
+		return -1;			// ã‚¨ãƒ©ãƒ¼ãŒèµ·ããŸã‚‰ç›´ã¡ã«çµ‚äº†
 	}
 
-	Player_Initialize();		//Player‚Ì‰Šú‰»
-	Field_Initialize();		//Field‚Ì‰Šú‰»
+	Field_Initialize();		//Fieldã®åˆæœŸåŒ–
 
-	srand((unsigned int)time(NULL));	//—”‚Ì‰Šú‰»
+	srand((unsigned int)time(NULL));	//ä¹±æ•°ã®åˆæœŸåŒ–
 
-	Sprite_Area(0);		//ƒGƒŠƒA‚Ì•ªŠ„
+	Sprite_Area(0);		//ã‚¨ãƒªã‚¢ã®åˆ†å‰²
 	Generate_Field();
+	Player_Initialize();		//Playerã®åˆæœŸåŒ–
 
 
-	//while(— ‰æ–Ê‚ğ•\‰æ–Ê‚É”½‰f ƒƒbƒZ[ƒWˆ— ‰æ–ÊƒNƒŠƒA ƒL[‚ÌXV)
+	//while(è£ç”»é¢ã‚’è¡¨ç”»é¢ã«åæ˜  ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç† ç”»é¢ã‚¯ãƒªã‚¢ ã‚­ãƒ¼ã®æ›´æ–°)
 	while (!(ScreenFlip()) && !(ProcessMessage()) && !(ClearDrawScreen()) && !(gpUpdateKey(Key))) {
 
 		DrawFormatString(100, 200, GetColor(255, 255, 255), "test");
 
-		Player_Update(Key, MAP_SIZE);	//PlayerXV
+		Player_Update(Key, MAP_SIZE);	//Playeræ›´æ–°
 		
-		Display_Field();	//Field•`‰æ
+		Display_Field();	//Fieldæç”»
 
 
 		Display_Area(Key);
-		Player_Draw();		//Player•`‰æ
+		Player_Draw();		//Playeræç”»
 		
 
 		count++;
+		Debug();
 
 	}
 
 	Player_Finalize();		
 
-	DxLib_End();				// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠg—p‚ÌI—¹ˆ—
+	DxLib_End();				// ï¼¤ï¼¸ãƒ©ã‚¤ãƒ–ãƒ©ãƒªä½¿ç”¨ã®çµ‚äº†å‡¦ç†
 
-	return 0;				// ƒ\ƒtƒg‚ÌI—¹ 
+	return 0;				// ã‚½ãƒ•ãƒˆã®çµ‚äº† 
 }

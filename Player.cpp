@@ -1,25 +1,31 @@
 #include "DxLib.h"
 #include "Player.h"
+#include "DungeonMake.h"
 
-//‚±‚Ìƒtƒ@ƒCƒ‹“à‚Å‚µ‚©g‚¦‚È‚¢ƒOƒ[ƒoƒ‹•Ï”
-static int m_Image;		//•`‰æƒnƒ“ƒhƒ‹
-static int m_x;		//xÀ•W
-static int m_y;		//yÀ•W
-static bool isMoving[4]; //4•ûŒü‚Å‚Ç‚Ì•ûŒü‚É“®‚¢‚Ä‚¢‚é‚©
+//ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«å†…ã§ã—ã‹ä½¿ãˆãªã„ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°
+static int m_Image;		//æç”»ãƒãƒ³ãƒ‰ãƒ«
+static int m_x;		//xåº§æ¨™
+static int m_y;		//yåº§æ¨™
+static bool isMoving[4]; //4æ–¹å‘ã§ã©ã®æ–¹å‘ã«å‹•ã„ã¦ã„ã‚‹ã‹
 static int count;
 
-//‰Šú‰»‚ğ‚·‚é
+void Debug() {
+	DrawFormatString(100, 100, GetColor(0, 255, 255), "(%d)", Return_Field().field[0][0]);
+	DrawFormatString(100, 200, GetColor(0, 255, 255), "(%d)", Return_Areas()[0].x);
+}
+
+//åˆæœŸåŒ–ã‚’ã™ã‚‹
 void Player_Initialize() {
 	m_Image = LoadGraph("source/image/testPlayer.png");
-	m_x = 0;
-	m_y = 0;
+	m_x = 32 * (Return_Areas()[rand() % Return_areaCount()].room.x + rand()%2);
+	m_y = 32 * (Return_Areas()[rand() % Return_areaCount()].room.y + rand()%3);
 	for (int i = 0; i < 4; i++) {
 		isMoving[i] = false;
 	}
 	count = 0;
 }
 
-//“®‚«‚ğŒvZ‚·‚é
+//å‹•ãã‚’è¨ˆç®—ã™ã‚‹
 void Player_Update(int Key[256],int MAP_SIZE) {
 	
 	if (!(isMoving[0] || isMoving[1] || isMoving[2] || isMoving[3])) {
@@ -63,13 +69,13 @@ void Player_Update(int Key[256],int MAP_SIZE) {
 
 }
 
-//•`‰æ‚·‚é
+//æç”»ã™ã‚‹
 void Player_Draw() {
 	DrawGraph(m_x, m_y, m_Image, TRUE);
 	DrawFormatString(m_x, m_y, GetColor(255, 255, 255), "(%d,%d)", m_x, m_y);
 }
 
-//I—¹ˆ—‚ğ‚·‚é
+//çµ‚äº†å‡¦ç†ã‚’ã™ã‚‹
 void Player_Finalize() {
 	DeleteGraph(m_Image);
 }
