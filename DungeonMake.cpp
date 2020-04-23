@@ -59,17 +59,20 @@ void Generate_Field() {
 	}
 
 	for (int i = 0; i < areaCount; i++) {
-		//エリアの内側だけroomにする
+		//エリアの内部だけroomにする
 		areas[i].room.x = areas[i].x + 2;
 		areas[i].room.y = areas[i].y + 2;
 		areas[i].room.h = areas[i].h - 4;
 		areas[i].room.w = areas[i].w - 4;
 
+		//room部分を床に
 		for (int y = areas[i].room.y; y < areas[i].room.y + areas[i].room.h; y++) {
 			for (int x = areas[i].room.x; x < areas[i].room.x + areas[i].room.w; x++) {
 				field.field[y][x] = CELL_TYPE_NONE;
 			}
 		}
+
+		//エリアの右下に通路を追加
 		for (int x = areas[i].x; x < areas[i].x + areas[i].w; x++) {
 			field.field[areas[i].y + areas[i].h - 1][x] = CELL_TYPE_NONE;
 		}
@@ -77,6 +80,7 @@ void Generate_Field() {
 			field.field[y][areas[i].x + areas[i].w - 1] = CELL_TYPE_NONE;
 		}
 
+		//通路と部屋をつなげる
 		for (int j = areas[i].y; j < areas[i].room.y; j++) {
 			srand((unsigned int)time(NULL));
 			if (rand() % 2 == 0) {
