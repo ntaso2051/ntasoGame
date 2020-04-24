@@ -43,19 +43,20 @@ int Return_floorImage() {
 }
 
 void Main_Camera() {
-	if (Return_Player().x % 32 == 0) {
-		for (int y = 0; y < FIELD_HEIGHT; y++) {
-			for (int x = 0; x < FIELD_WIDTH; x++) {
-				if (field.field[y + Return_Player().y - FIELD_HEIGHT / 2][x + Return_Player().x - FIELD_WIDTH / 2] == CELL_TYPE_NONE) {
-					DrawGraph(x * 32, y * 32, floorImage, TRUE);
-				}
-				else {
-					DrawGraph(x * 32, y * 32, wallImage, TRUE);
-				}
+	CHARACTER player = Return_Player();
+	for (int y = -1; y < 10; y++) {
+		for (int x = -1; x < 13; x++) {
+			if (field.field[player.y / 32 + y - 4][player.x / 32 + x - 6] == CELL_TYPE_NONE && player.y / 32 + y - 4 >=0 && player.x / 32 + x - 6>=0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 <64) {
+				DrawGraph(32 * x - player.scrollX, 32 * y - player.scrollY, floorImage, TRUE);
+			}
+			else if(field.field[player.y / 32 + y - 4][player.x / 32 + x - 6] == CELL_TYPE_WALL && player.y / 32 + y - 4 >= 0 && player.x / 32 + x - 6 >= 0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 < 64){
+				DrawGraph(32 * x  - player.scrollX, 32 * y - player.scrollY, wallImage, TRUE);
 			}
 		}
 	}
+	Player_Draw();
 }
+
 
 //Fieldの初期化
 void Field_Initialize() {

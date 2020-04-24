@@ -27,8 +27,6 @@ int Return_areaCount();
 int Return_wallImage();
 int Return_floorImage();
 
-void Main_Camera();
-
 void Field_Initialize();
 
 void Display_Field();

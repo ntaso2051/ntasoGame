@@ -6,10 +6,14 @@ typedef struct {
 	int image;
 	int x;
 	int y;
+	int scrollX;
+	int scrollY;
 	bool isMoving[4];
 }CHARACTER;
 
 CHARACTER Return_Player();
+
+void Main_Camera();
 
 void Player_Initialize();
 

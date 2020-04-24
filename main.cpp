@@ -43,7 +43,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		Main_Camera();
 
 		//Display_Area(Key);
-		Player_Draw();		
+		//Player_Draw_Debug();		
 		
 
 		count++;
