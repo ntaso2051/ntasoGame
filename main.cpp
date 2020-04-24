@@ -14,7 +14,8 @@ static int count = 0;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	ChangeWindowMode(TRUE), SetDrawScreen(DX_SCREEN_BACK);	
-	SetGraphMode(2048, 1536, 32);	
+	//SetGraphMode(2048, 1536, 32);	
+	SetGraphMode(384, 288, 32);
 	SetWindowSize(1024, 768);	
 
 	if (DxLib_Init() == -1)	
@@ -37,10 +38,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		Player_Update(Key, MAP_SIZE);	
 		
-		Display_Field();	
+		//Display_Field();	
 
+		Main_Camera();
 
-		Display_Area(Key);
+		//Display_Area(Key);
 		Player_Draw();		
 		
 

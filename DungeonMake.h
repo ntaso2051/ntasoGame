@@ -2,6 +2,11 @@
 
 #define DEF_FIELD_H
 
+enum {
+	CELL_TYPE_NONE,
+	CELL_TYPE_WALL
+};
+
 typedef struct {
 	int field[48][64];
 }FIELD;
@@ -19,6 +24,10 @@ typedef struct {
 FIELD Return_Field();
 AREA* Return_Areas();
 int Return_areaCount();
+int Return_wallImage();
+int Return_floorImage();
+
+void Main_Camera();
 
 void Field_Initialize();
 

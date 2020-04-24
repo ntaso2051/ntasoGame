@@ -4,25 +4,23 @@
 #include <stdlib.h>
 #include "Player.h"
 
+int wallImage;
+int floorImage;
 
-enum {
-	CELL_TYPE_NONE,
-	CELL_TYPE_WALL
-};
-
-static int wallImage;
-static int floorImage;
 static const int MAP_SIZE = 32;
 static const int FIELD_WIDTH = 64;
 static const int FIELD_HEIGHT = 48;
 static const int AREA_MAX = 48;
 static const int AREA_SIZE_MIN = 8;
+const int SCREEN_HEIGHT = 9;
+const int SCREEN_WIDTH = 12;
 
 
 
 static FIELD field;
 static AREA areas[AREA_MAX];
 static int areaCount;
+static int Display[SCREEN_HEIGHT][SCREEN_WIDTH];
 
 FIELD Return_Field(){
 	return field;
@@ -36,6 +34,28 @@ int Return_areaCount() {
 	return areaCount;
 }
 
+int Return_wallImage() {
+	return wallImage;
+}
+
+int Return_floorImage() {
+	return floorImage;
+}
+
+void Main_Camera() {
+	if (Return_Player().x % 32 == 0) {
+		for (int y = 0; y < FIELD_HEIGHT; y++) {
+			for (int x = 0; x < FIELD_WIDTH; x++) {
+				if (field.field[y + Return_Player().y - FIELD_HEIGHT / 2][x + Return_Player().x - FIELD_WIDTH / 2] == CELL_TYPE_NONE) {
+					DrawGraph(x * 32, y * 32, floorImage, TRUE);
+				}
+				else {
+					DrawGraph(x * 32, y * 32, wallImage, TRUE);
+				}
+			}
+		}
+	}
+}
 
 //Fieldの初期化
 void Field_Initialize() {
@@ -201,8 +221,15 @@ void Sprite_Area(int areaIndex) {
 
 	if(rand() % 2)
 	{
-		areas[areaIndex].w /= 2;
-
+		if (rand() % 3 == 0) {
+			areas[areaIndex].w /= 2;
+		}
+		else if (rand() % 3 == 1) {
+			areas[areaIndex].w /= 4;
+		}
+		else {
+			areas[areaIndex].w /= 8;
+		}
 		areas[newAreaIndex].x = areas[areaIndex].x + areas[areaIndex].w;
 		areas[newAreaIndex].y = areas[areaIndex].y;
 		areas[newAreaIndex].w = w - areas[areaIndex].w;
@@ -210,7 +237,12 @@ void Sprite_Area(int areaIndex) {
 	}
 	else
 	{
-		areas[areaIndex].h /= 2;
+		if (rand() % 3 == 0) {
+			areas[areaIndex].h /= 4;
+		}
+		else {
+			areas[areaIndex].h /= 2;
+		}
 
 		areas[newAreaIndex].x = areas[areaIndex].x;
 		areas[newAreaIndex].y = areas[areaIndex].y + areas[areaIndex].h;

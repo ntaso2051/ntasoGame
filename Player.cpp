@@ -4,7 +4,13 @@
 
 CHARACTER player;
 
+
 static int count;
+
+
+CHARACTER Return_Player() {
+	return player;
+}
 
 void Debug() {
 	DrawFormatString(100, 100, GetColor(0, 255, 255), "(%d)", Return_Field().field[0][0]);
@@ -13,8 +19,8 @@ void Debug() {
 
 void Player_Initialize() {
 	player.image = LoadGraph("source/image/testPlayer.png");
-	player.x = 32 * (Return_Areas()[rand() % Return_areaCount()].room.x + rand()%2);
-	player.y = 32 * (Return_Areas()[rand() % Return_areaCount()].room.y + rand()%3);
+	player.x = 32 * (Return_Areas()[rand() % Return_areaCount()].room.x + 2);
+	player.y = 32 * (Return_Areas()[rand() % Return_areaCount()].room.y + 2);
 	for (int i = 0; i < 4; i++) {
 		player.isMoving[i] = false;
 	}
@@ -65,8 +71,13 @@ void Player_Update(int Key[256],int MAP_SIZE) {
 }
 
 void Player_Draw() {
+	DrawGraph(192, 128, player.image, TRUE);
+	DrawFormatString(192, 160, GetColor(255, 255, 255), "(%d,%d)", player.x, player.y);
+}
+
+void Player_Draw_Debug() {
 	DrawGraph(player.x, player.y, player.image, TRUE);
-	DrawFormatString(player.x, player.y, GetColor(255, 255, 255), "(%d,%d)", player.x, player.y);
+	DrawFormatString(192, 128, GetColor(255, 255, 255), "(%d,%d)", player.x, player.y);
 }
 
 void Player_Finalize() {
