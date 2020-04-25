@@ -34,19 +34,25 @@ void Player_Initialize() {
 }
 
 void Player_Update(int Key[256],int MAP_SIZE) {
-	
+	int x = player.x;
+	int y = player.y;
+
 	if (!(player.isMoving[0] || player.isMoving[1] || player.isMoving[2] || player.isMoving[3])) {
 		if (Key[KEY_INPUT_RIGHT] == 1) {
-			player.isMoving[0] = true;
+			if (Return_Field().field[player.y / 32][(player.x + 32) / 32] != CELL_TYPE_WALL)
+				player.isMoving[0] = true;
 		}
 		if (Key[KEY_INPUT_LEFT] == 1) {
-			player.isMoving[1] = true;
+			if(Return_Field().field[player.y / 32][(player.x - 32) / 32] != CELL_TYPE_WALL)
+				player.isMoving[1] = true;
 		}
 		if (Key[KEY_INPUT_UP] == 1) {
-			player.isMoving[2] = true;
+			if (Return_Field().field[(player.y - 32) / 32][player.x / 32] != CELL_TYPE_WALL)
+				player.isMoving[2] = true;
 		}
 		if (Key[KEY_INPUT_DOWN] == 1) {
-			player.isMoving[3] = true;
+			if (Return_Field().field[(player.y + 32) / 32][player.x / 32] != CELL_TYPE_WALL)
+				player.isMoving[3] = true;
 		}
 	}
 	else {

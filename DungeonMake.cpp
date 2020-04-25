@@ -204,7 +204,7 @@ void Display_Area(int Key[256]) {
 	}
 }
 
-//Field描画
+//Field描画(デバッグ用)
 /*void Display_Field() {
 	for (int i = 0; i < FIELD_WIDTH * MAP_SIZE; i+=32) {
 		for (int j = 0; j < FIELD_HEIGHT * MAP_SIZE; j += 32) {
@@ -214,8 +214,10 @@ void Display_Area(int Key[256]) {
 	}
 }
 */
+
 //エリアを分割
 void Sprite_Area(int areaIndex) {
+
 	int newAreaIndex = areaCount;
 	int w = areas[areaIndex].w;
 	int h = areas[areaIndex].h;
@@ -263,4 +265,5 @@ void Sprite_Area(int areaIndex) {
 
 	Sprite_Area(areaIndex);
 	Sprite_Area(newAreaIndex);
+
 }
