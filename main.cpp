@@ -29,7 +29,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	Sprite_Area(0);		
 	Generate_Field();
-	Player_Initialize();		
+	Player_Initialize();
+	Goal_Initialize();
 
 
 	while (!(ScreenFlip()) && !(ProcessMessage()) && !(ClearDrawScreen()) && !(gpUpdateKey(Key))) {
@@ -42,12 +43,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		Main_Camera();
 
+		Dungeon_Rebuild();
 		//Display_Area(Key);
 		//Player_Draw_Debug();		
-		
 
 		count++;
-		Debug();
+		//Debug();
 
 	}
 

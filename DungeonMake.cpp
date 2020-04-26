@@ -6,6 +6,7 @@
 
 int wallImage;
 int floorImage;
+int stairsImage;
 
 static const int MAP_SIZE = 32;
 static const int FIELD_WIDTH = 64;
@@ -15,12 +16,12 @@ static const int AREA_SIZE_MIN = 8;
 const int SCREEN_HEIGHT = 9;
 const int SCREEN_WIDTH = 12;
 
-
-
 static FIELD field;
 static AREA areas[AREA_MAX];
 static int areaCount;
 static int Display[SCREEN_HEIGHT][SCREEN_WIDTH];
+
+int stairsCount = 1;
 
 FIELD Return_Field(){
 	return field;
@@ -52,8 +53,14 @@ void Main_Camera() {
 			else if(field.field[player.y / 32 + y - 4][player.x / 32 + x - 6] == CELL_TYPE_WALL && player.y / 32 + y - 4 >= 0 && player.x / 32 + x - 6 >= 0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 < 64){
 				DrawGraph(32 * x  - player.scrollX, 32 * y - player.scrollY, wallImage, TRUE);
 			}
+			else if (field.field[player.y / 32 + y - 4][player.x / 32 + x - 6] == CELL_TYPE_STAIRS && player.y / 32 + y - 4 >= 0 && player.x / 32 + x - 6 >= 0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 < 64) {
+				DrawGraph(32 * x - player.scrollX, 32 * y - player.scrollY, stairsImage, TRUE);
+			}
 		}
 	}
+	DrawFormatString(32, 32, GetColor(255, 255, 255), "(%d,%d)", field.goalX, field.goalY);
+	DrawFormatString(320, 250, GetColor(255, 255, 255), "%dF", stairsCount);
+	
 	Player_Draw();
 }
 
@@ -63,6 +70,7 @@ void Field_Initialize() {
 	areaCount = 0;
 	wallImage = LoadGraph("source/image/Wall.png");
 	floorImage = LoadGraph("source/image/floor.png");
+	stairsImage = LoadGraph("source/image/stairs.png");
 	areas[0].x = 0;
 	areas[0].y = 0;
 	areas[0].w = FIELD_WIDTH;
@@ -70,9 +78,15 @@ void Field_Initialize() {
 	areaCount++;
 }
 
+void Goal_Initialize() {
+	field.goalX = 32 * (Return_Areas()[rand() % Return_areaCount()].room.x + 3);
+	field.goalY = 32 * (Return_Areas()[rand() % Return_areaCount()].room.y + 2);
+	field.field[field.goalY / 32][field.goalX / 32] = CELL_TYPE_STAIRS;
+}
+
 //Fieldの作成
 void Generate_Field() {
-
+	
 	for (int y = 0; y < FIELD_HEIGHT; y++) {
 		for (int x = 0; x < FIELD_WIDTH; x++) {
 			field.field[y][x] = CELL_TYPE_WALL;
@@ -176,6 +190,19 @@ void Display_Field() {
 				DrawGraph(x * 32, y * 32, floorImage, TRUE);
 			}
 		}
+	}
+}
+
+void Dungeon_Rebuild() {
+	if (Return_Player().x == field.goalX && Return_Player().y == field.goalY) {
+		Field_Initialize();
+		srand((unsigned int)time(NULL));
+		Sprite_Area(0);
+		Generate_Field();
+		Player_Initialize();	
+		Goal_Initialize();
+
+		stairsCount++;
 	}
 }
 

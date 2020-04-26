@@ -5,10 +5,13 @@
 enum {
 	CELL_TYPE_NONE,
 	CELL_TYPE_WALL,
+	CELL_TYPE_STAIRS,
 };
 
 typedef struct {
 	int field[48][64];
+	int goalX;
+	int goalY;
 }FIELD;
 
 typedef struct {
@@ -41,3 +44,9 @@ void Sprite_Area(int areaIndex);
 
 //field‚ğ¶¬‚·‚é
 void Generate_Field();
+
+//goal‚ğİ’è
+void Goal_Initialize();
+
+//goal“’B‚Éƒ_ƒ“ƒWƒ‡ƒ“‚ğÄ¶¬
+void Dungeon_Rebuild();
