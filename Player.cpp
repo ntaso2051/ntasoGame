@@ -97,7 +97,7 @@ void Player_Update(int Key[256],int MAP_SIZE) {
 }
 
 void Player_Draw() {
-	DrawGraph(192, 128, player.image, TRUE);
+	DrawGraph(256, 192, player.image, TRUE);
 	DrawFormatString(192, 160, GetColor(255, 255, 255), "(%d,%d)", player.x, player.y);
 }
 

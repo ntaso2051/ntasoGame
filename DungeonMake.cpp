@@ -9,12 +9,12 @@ int floorImage;
 int stairsImage;
 
 static const int MAP_SIZE = 32;
-static const int FIELD_WIDTH = 64;
-static const int FIELD_HEIGHT = 48;
+static const int FIELD_WIDTH = 48;
+static const int FIELD_HEIGHT = 36;
 static const int AREA_MAX = 48;
 static const int AREA_SIZE_MIN = 8;
-const int SCREEN_HEIGHT = 9;
-const int SCREEN_WIDTH = 12;
+const int SCREEN_HEIGHT = 12;
+const int SCREEN_WIDTH = 16;
 
 static FIELD field;
 static AREA areas[AREA_MAX];
@@ -45,15 +45,15 @@ int Return_floorImage() {
 
 void Main_Camera() {
 	CHARACTER player = Return_Player();
-	for (int y = -1; y < 10; y++) {
-		for (int x = -1; x < 13; x++) {
-			if (field.field[player.y / 32 + y - 4][player.x / 32 + x - 6] == CELL_TYPE_NONE && player.y / 32 + y - 4 >=0 && player.x / 32 + x - 6>=0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 <64) {
+	for (int y = -1; y < 20; y++) {
+		for (int x = -1; x < 25; x++) {
+			if (field.field[player.y / 32 + y - SCREEN_HEIGHT / 2][player.x / 32 + x - SCREEN_WIDTH / 2] == CELL_TYPE_NONE && player.y / 32 + y - SCREEN_HEIGHT / 2 >=0 && player.x / 32 + x - SCREEN_WIDTH / 2 >=0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 <64) {
 				DrawGraph(32 * x - player.scrollX, 32 * y - player.scrollY, floorImage, TRUE);
 			}
-			else if(field.field[player.y / 32 + y - 4][player.x / 32 + x - 6] == CELL_TYPE_WALL && player.y / 32 + y - 4 >= 0 && player.x / 32 + x - 6 >= 0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 < 64){
+			else if(field.field[player.y / 32 + y - SCREEN_HEIGHT / 2][player.x / 32 + x - SCREEN_WIDTH / 2] == CELL_TYPE_WALL && player.y / 32 + y - SCREEN_HEIGHT / 2 >= 0 && player.x / 32 + x - SCREEN_WIDTH / 2 >= 0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 < 64){
 				DrawGraph(32 * x  - player.scrollX, 32 * y - player.scrollY, wallImage, TRUE);
 			}
-			else if (field.field[player.y / 32 + y - 4][player.x / 32 + x - 6] == CELL_TYPE_STAIRS && player.y / 32 + y - 4 >= 0 && player.x / 32 + x - 6 >= 0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 < 64) {
+			else if (field.field[player.y / 32 + y - SCREEN_HEIGHT / 2][player.x / 32 + x - SCREEN_WIDTH / 2] == CELL_TYPE_STAIRS && player.y / 32 + y - SCREEN_HEIGHT / 2 >= 0 && player.x / 32 + x - SCREEN_WIDTH / 2 >= 0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 < 64) {
 				DrawGraph(32 * x - player.scrollX, 32 * y - player.scrollY, stairsImage, TRUE);
 			}
 		}
