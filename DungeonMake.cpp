@@ -7,6 +7,7 @@
 int wallImage;
 int floorImage;
 int stairsImage;
+int amuletImage;
 
 static const int MAP_SIZE = 32;
 static const int FIELD_WIDTH = 48;
@@ -31,6 +32,10 @@ AREA* Return_Areas() {
 	return areas;
 }
 
+int Return_stairsCount() {
+	return stairsCount;
+}
+
 int Return_areaCount() {
 	return areaCount;
 }
@@ -45,6 +50,8 @@ int Return_floorImage() {
 
 void Main_Camera() {
 	CHARACTER player = Return_Player();
+	CHARACTER enemy = Return_Enemy();
+
 	for (int y = -1; y < 20; y++) {
 		for (int x = -1; x < 25; x++) {
 			if (field.field[player.y / 32 + y - SCREEN_HEIGHT / 2][player.x / 32 + x - SCREEN_WIDTH / 2] == CELL_TYPE_NONE && player.y / 32 + y - SCREEN_HEIGHT / 2 >=0 && player.x / 32 + x - SCREEN_WIDTH / 2 >=0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 <64) {
@@ -56,14 +63,49 @@ void Main_Camera() {
 			else if (field.field[player.y / 32 + y - SCREEN_HEIGHT / 2][player.x / 32 + x - SCREEN_WIDTH / 2] == CELL_TYPE_STAIRS && player.y / 32 + y - SCREEN_HEIGHT / 2 >= 0 && player.x / 32 + x - SCREEN_WIDTH / 2 >= 0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 < 64) {
 				DrawGraph(32 * x - player.scrollX, 32 * y - player.scrollY, stairsImage, TRUE);
 			}
+			else if (field.field[player.y / 32 + y - SCREEN_HEIGHT / 2][player.x / 32 + x - SCREEN_WIDTH / 2] == CELL_TYPE_AMULET && player.y / 32 + y - SCREEN_HEIGHT / 2 >= 0 && player.x / 32 + x - SCREEN_WIDTH / 2 >= 0 && player.y / 32 + y - 4 < 48 && player.x / 32 + x - 6 < 64) {
+				DrawGraph(32 * x - player.scrollX, 32 * y - player.scrollY, amuletImage, TRUE);
+			}
 		}
 	}
-	DrawFormatString(32, 32, GetColor(255, 255, 255), "(%d,%d)", field.goalX, field.goalY);
-	DrawFormatString(320, 250, GetColor(255, 255, 255), "%dF", stairsCount);
+
+	if (abs(enemy.x - player.x) < 32 * (SCREEN_WIDTH / 2 + 1) && abs(enemy.y - player.y) < 32 * (SCREEN_HEIGHT / 2 + 1)) {
+		DrawGraph(enemy.x - player.x + enemy.scrollX + 32 * SCREEN_WIDTH / 2 - player.scrollX, enemy.y - player.y + 32 * SCREEN_HEIGHT / 2 - player.scrollY + enemy.scrollY, enemy.image, TRUE);
+	}
+	DrawFormatString(250, 32, GetColor(255, 255, 255), "%d / %d", player.hp, player.maxHp);
+	DrawFormatString(450, 32, GetColor(255, 255, 255), "%dF", stairsCount);
+	/*
+	DrawFormatString(32, 32, GetColor(255, 255, 255), "stairsPos(%d,%d)", field.goalX, field.goalY);
+	DrawFormatString(32, 160, GetColor(255, 255, 255), "amuletPos(%d,%d)", field.amuletX, field.amuletY);
+	DrawFormatString(32, 64, GetColor(255, 255, 255), "correntRoom(%d)", Get_Room(player.x, player.y));
+	DrawFormatString(450, 32, GetColor(255, 255, 255), "%dF", stairsCount);
+	DrawFormatString(250, 32, GetColor(255, 255, 255), "%d / %d", player.hp, player.maxHp);
+	DrawFormatString(32, 96, GetColor(255, 255, 255), "enemyPos(%d,%d)", enemy.x, enemy.y);
+	DrawFormatString(32, 128, GetColor(255, 255, 255), "enemyScrollPos(%d,%d)", enemy.scrollX , enemy.scrollY);
+	DrawFormatString(250, 200, GetColor(255, 0, 255), "countE: %d", Return_CountE());
+	DrawFormatString(250, 232, GetColor(255, 0, 255), "count: %d", Return_Count());
+
+	for (int i = 0; i < 4; i++) {
+		DrawFormatString(300, 128+32*i, GetColor(0, 255, 255), "isMoving(%d,%d)", player.isMoving[i], enemy.isMoving[i]);
+	}
+	*/
 	
 	Player_Draw();
 }
 
+//現在地のルーム番号を返す関数
+int Get_Room(int _x, int _y) {
+	for (int i = 0; i < areaCount; i++) {
+		if ((_x / MAP_SIZE >= areas[i].room.x) && (_x / MAP_SIZE < areas[i].room.x + areas[i].room.w)
+			&& (_y / MAP_SIZE >= areas[i].room.y) && (_y / MAP_SIZE < areas[i].room.y + areas[i].room.h)) {
+			return i;
+		}
+	}
+	if (_x == -200) {
+		return -2;
+	}
+	return -1;
+}
 
 //Fieldの初期化
 void Field_Initialize() {
@@ -71,6 +113,7 @@ void Field_Initialize() {
 	wallImage = LoadGraph("source/image/Wall.png");
 	floorImage = LoadGraph("source/image/floor.png");
 	stairsImage = LoadGraph("source/image/stairs.png");
+	amuletImage = LoadGraph("source/image/amulet.png");
 	areas[0].x = 0;
 	areas[0].y = 0;
 	areas[0].w = FIELD_WIDTH;
@@ -79,9 +122,15 @@ void Field_Initialize() {
 }
 
 void Goal_Initialize() {
-	field.goalX = 32 * (Return_Areas()[rand() % Return_areaCount()].room.x + 3);
-	field.goalY = 32 * (Return_Areas()[rand() % Return_areaCount()].room.y + 2);
+	field.goalX = 32 * (Return_Areas()[(rand() * 4) % Return_areaCount()].room.x + 3);
+	field.goalY = 32 * (Return_Areas()[(rand() * 4) % Return_areaCount()].room.y + 2);
 	field.field[field.goalY / 32][field.goalX / 32] = CELL_TYPE_STAIRS;
+}
+
+void Amulet_Initialize() {
+	field.amuletX = 32 * (Return_Areas()[(rand() * 2) % Return_areaCount()].room.x + 2);
+	field.amuletY = 32 * (Return_Areas()[(rand() * 2) % Return_areaCount()].room.y + 4);
+	field.field[field.amuletY / 32][field.amuletX / 32] = CELL_TYPE_AMULET;
 }
 
 //Fieldの作成
@@ -201,6 +250,9 @@ void Dungeon_Rebuild() {
 		Generate_Field();
 		Player_Initialize();	
 		Goal_Initialize();
+		if (stairsCount >= 5)
+			Amulet_Initialize();
+		Enemy_Initialize();
 
 		stairsCount++;
 	}

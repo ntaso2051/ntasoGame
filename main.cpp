@@ -31,25 +31,44 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Generate_Field();
 	Player_Initialize();
 	Goal_Initialize();
+	Enemy_Initialize();
 
 
 	while (!(ScreenFlip()) && !(ProcessMessage()) && !(ClearDrawScreen()) && !(gpUpdateKey(Key))) {
+		if (Return_Player().isClear) {
+			DrawFormatString(32, 300, GetColor(255, 0, 0), "GAME CLEAR !!\nPlease input escape key");
+			if (Key[KEY_INPUT_ESCAPE]) {
+				break;
+			}
+		}
+		else {
 
-		DrawFormatString(100, 200, GetColor(255, 255, 255), "test");
+			if (!Return_Player().isLiving) {
+				DrawFormatString(32, 300, GetColor(255, 0, 0), "GAME OVER\nPlease input escape key");
+				if (Key[KEY_INPUT_ESCAPE]) {
+					break;
+				}
+			}
+			else {
 
-		Player_Update(Key, MAP_SIZE);	
-		
-		//Display_Field();	
+				//DrawFormatString(100, 200, GetColor(255, 255, 255), "test");
 
-		Main_Camera();
+				Player_Update(Key, MAP_SIZE);
 
-		Dungeon_Rebuild();
-		//Display_Area(Key);
-		//Player_Draw_Debug();		
+				//Enemy_Update(Key, MAP_SIZE);
 
-		count++;
-		//Debug();
+				//Display_Field();	
 
+				Main_Camera();
+
+				Dungeon_Rebuild();
+				//Display_Area(Key);
+				//Player_Draw_Debug();		
+
+				count++;
+				//Debug();
+			}
+		}
 	}
 
 	Player_Finalize();		

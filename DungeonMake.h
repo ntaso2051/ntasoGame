@@ -6,12 +6,15 @@ enum {
 	CELL_TYPE_NONE,
 	CELL_TYPE_WALL,
 	CELL_TYPE_STAIRS,
+	CELL_TYPE_AMULET,
 };
 
 typedef struct {
 	int field[48][64];
 	int goalX;
 	int goalY;
+	int amuletX;
+	int amuletY;
 }FIELD;
 
 typedef struct {
@@ -29,6 +32,12 @@ AREA* Return_Areas();
 int Return_areaCount();
 int Return_wallImage();
 int Return_floorImage();
+int Return_stairsCount();
+
+void Amulet_Initialize();
+
+//room‚ğæ“¾
+int Get_Room(int _x, int _y);
 
 //Field‚ğ‰Šú‰»
 void Field_Initialize();
